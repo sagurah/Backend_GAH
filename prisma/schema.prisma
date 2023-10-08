@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Kamar {
+  ID_KAMAR Int @id @default(autoincrement())
+  NO_KAMAR Int?
+  JENIS_KAMAR String?
+  JENIS_BED String?
+  KAPASITAS Int?
+  LUAS_KAMAR Int?
+  FASILITAS String?
+}
