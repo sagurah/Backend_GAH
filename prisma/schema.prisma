@@ -16,3 +16,11 @@ model Kamar {
   LUAS_KAMAR Int?
   FASILITAS String?
 }
+
+model Season {
+  ID_SEASON Int @id @default(autoincrement())
+  JENIS_SEASON String?
+  TGL_MULAI DateTime?
+  TGL_AKHIR DateTime?
+  HARGA Float?
+}
