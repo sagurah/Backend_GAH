@@ -3,6 +3,26 @@ const prisma = require('../prisma/index')
 const addSeason = async (req, res) => {
   const newData = req.body
 
+  const today = new Date()
+  const plusTwoMonths = new Date().setMonth(today.getMonth() + 2)
+
+  const tglMulai = new Date(newData.TGL_MULAI)
+  const tglAkhir = new Date(newData.TGL_AKHIR)
+
+  if(tglMulai < plusTwoMonths) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Tanggal mulai harus lebih dari atau sama dengan 2 bulan sebelum hari ini'
+    })
+  }
+
+  if(tglAkhir < tglMulai) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Tanggal akhir harus lebih dari atau sama dengan tanggal mulai'
+    })
+  }
+
   try {
     const result = await prisma.season.create({
       data: newData
@@ -23,6 +43,7 @@ const addSeason = async (req, res) => {
 }
 
 const getAllSeason = async (req, res) => {
+
   try {
     const result = await prisma.season.findMany()
 
@@ -81,6 +102,26 @@ const getSeasonByJenis = async (req, res) => {
 const updateSeason = async (req, res) => {
   const id = req.params.id
   const newData = req.body
+
+  const today = new Date()
+  const plusTwoMonths = new Date().setMonth(today.getMonth() + 2)
+
+  const tglMulai = new Date(newData.TGL_MULAI)
+  const tglAkhir = new Date(newData.TGL_AKHIR)
+
+  if(tglMulai < plusTwoMonths) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Tanggal mulai harus lebih dari atau sama dengan 2 bulan sebelum hari ini'
+    })
+  }
+
+  if(tglAkhir < tglMulai) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Tanggal akhir harus lebih dari atau sama dengan tanggal mulai'
+    })
+  }
 
   try {
     const season = await prisma.season.findUnique({

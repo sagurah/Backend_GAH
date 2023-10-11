@@ -15,6 +15,9 @@ model Kamar {
   KAPASITAS Int?
   LUAS_KAMAR Int?
   FASILITAS String?
+
+  tarif Tarif[]
+  @@map(name: "Kamar")
 }
 
 model Season {
@@ -22,5 +25,26 @@ model Season {
   JENIS_SEASON String?
   TGL_MULAI DateTime?
   TGL_AKHIR DateTime?
+  HARGA Float?
+
+  tarif Tarif[]
+  @@map(name: "Season")
+}
+
+model Tarif {
+  ID_TARIF Int @id @default(autoincrement())
+  TOTAL_TARIF Float?
+  ID_KAMAR Int?
+  ID_SEASON Int?
+
+  kamar Kamar? @relation(fields: [ID_KAMAR], references: [ID_KAMAR])
+  season Season? @relation(fields: [ID_SEASON], references: [ID_SEASON])
+  @@map(name: "Tarif")
+}
+
+model Fasilitas_Tambahan {
+  ID_FASILITAS Int @id @default(autoincrement())
+  NAMA_FASILITAS String?
+  SATUAN String?
   HARGA Float?
 }

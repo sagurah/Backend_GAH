@@ -4,6 +4,8 @@ require('dotenv').config()
 
 const kamarRoutes = require('./routes/kamarRoutes')
 const seasonRoutes = require('./routes/seasonRoutes')
+const fasilitasTambahanRoutes = require('./routes/fasilitasTambahanRoutes')
+const tarifRoutes = require('./routes/tarifRoutes')
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -17,10 +19,12 @@ const extendUrl = `/api/${version}`
 
 app.use(`${extendUrl}`, kamarRoutes)
 app.use(`${extendUrl}`, seasonRoutes)
+app.use(`${extendUrl}`, fasilitasTambahanRoutes)
+app.use(`${extendUrl}`, tarifRoutes)
 
 app.listen(PORT, (err) => {
   if(err) {
     console.log(`Server Error: ${err}`)
   }
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server Running on PORT: ${PORT}`)
 })
