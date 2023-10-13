@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Start Tabel Kamar
+
 model Kamar {
   ID_KAMAR Int @id @default(autoincrement())
   NO_KAMAR Int?
@@ -39,12 +41,123 @@ model Tarif {
 
   kamar Kamar? @relation(fields: [ID_KAMAR], references: [ID_KAMAR])
   season Season? @relation(fields: [ID_SEASON], references: [ID_SEASON])
+
+  detail_reservasi_kamar Detail_Reservasi_Kamar[]
+
   @@map(name: "Tarif")
 }
+
+model Detail_Reservasi_Kamar {
+  ID_DETAIL_RESERVASI_KAMAR Int @id @default(autoincrement())
+  JUMLAH Int?
+  TOTAL_HARGA_KAMAR Float?
+  ID_TARIF Int?
+  ID_RESERVASI Int?
+
+  reservasi Reservasi? @relation(fields: [ID_RESERVASI], references: [ID_RESERVASI])
+  tarif Tarif? @relation(fields: [ID_TARIF], references: [ID_TARIF])
+}
+
+// End Tabel Kamar
+
+// Start Tabel Fasilitas
 
 model Fasilitas_Tambahan {
   ID_FASILITAS Int @id @default(autoincrement())
   NAMA_FASILITAS String?
   SATUAN String?
   HARGA Float?
+
+  detail_reservasi_fasilitas Detail_Reservasi_Fasilitas[]
 }
+
+model Detail_Reservasi_Fasilitas {
+  ID_DETAIL_RESERVASI_FASILITAS Int @id @default(autoincrement())
+  JUMLAH Int?
+  TOTAL_HARGA_FASILITAS Float?
+  ID_FASILITAS Int?
+  ID_RESERVASI Int?
+
+  reservasi Reservasi? @relation(fields: [ID_RESERVASI], references: [ID_RESERVASI])
+  fasilitas_tambahan Fasilitas_Tambahan? @relation(fields: [ID_FASILITAS], references: [ID_FASILITAS])
+}
+
+// End Tabel Fasilitas
+
+// Start Tabel Reservasi dan Invoice
+
+model Reservasi {
+  ID_RESERVASI Int @id @default(autoincrement())
+  TGL_RESERVASI DateTime? @default(now())
+  TGL_CHECKIN DateTime?
+  TGL_CHECKOUT DateTime?
+  JML_DEWASA Int?
+  JML_ANAK Int?
+  TOTAL_BAYAR Float?
+  STATUS Int? // 0 = belum bayar, 1 = sudah bayar, 2 = sudah checkin, 3 = sudah checkout
+  ID_PEGAWAI Int?
+  ID_CUSTOMER Int?
+
+  invoice Invoice[]
+  detail_reservasi_kamar Detail_Reservasi_Kamar[]
+  detail_reservasi_fasilitas Detail_Reservasi_Fasilitas[]
+}
+
+model Invoice {
+  ID_INVOICE Int @id @default(autoincrement())
+  NO_INVOICE String?
+  TGL_PELUNASAN DateTime?
+  TAX Float?
+  JAMINAN Float?
+  DEPOSIT Float?
+  SISA_KEKURANGAN Float?
+  
+  ID_RESERVASI Int?
+  reservasi Reservasi? @relation(fields: [ID_RESERVASI], references: [ID_RESERVASI])
+}
+
+// End Tabel Reservasi dan Invoice
+
+// Start Tabel Akun Pegawai dan Customer
+
+model Role {
+  ID_ROLE Int @id @default(autoincrement())
+  NAMA_ROLE String?
+
+  akun Akun[]
+}
+
+model Akun {
+  ID_AKUN Int @id @default(autoincrement())
+  USERNAME String? @unique
+  PASSWORD String?
+
+  customer Customer[]
+  pegawai Pegawai[]
+
+  ID_ROLE Int?
+  role Role? @relation(fields: [ID_ROLE], references: [ID_ROLE])
+}
+
+model Customer {
+  ID_CUSTOMER Int @id @default(autoincrement())
+  JENIS_CUSTOMER String? @default("Personal")
+  NAMA_CUSTOMER String? @default("-")
+  NAMA_INSTITUSI String? @default("-")
+  NO_TELP String? @default("-")
+  EMAIL String? @default("-")
+  ALAMAT String? @default("-")
+
+  ID_AKUN Int?
+  akun Akun? @relation(fields: [ID_AKUN], references: [ID_AKUN])
+}
+
+model Pegawai {
+  ID_PEGAWAI Int @id @default(autoincrement())
+  NAMA_PEGAWAI String?
+
+  ID_AKUN Int?
+  akun Akun? @relation(fields: [ID_AKUN], references: [ID_AKUN])
+}
+
+// End Tabel Akun Pegawai dan Customer

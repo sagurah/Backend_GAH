@@ -6,6 +6,7 @@ const kamarRoutes = require('./routes/kamarRoutes')
 const seasonRoutes = require('./routes/seasonRoutes')
 const fasilitasTambahanRoutes = require('./routes/fasilitasTambahanRoutes')
 const tarifRoutes = require('./routes/tarifRoutes')
+const authRoutes = require('./routes/authRoutes')
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -21,6 +22,7 @@ app.use(`${extendUrl}`, kamarRoutes)
 app.use(`${extendUrl}`, seasonRoutes)
 app.use(`${extendUrl}`, fasilitasTambahanRoutes)
 app.use(`${extendUrl}`, tarifRoutes)
+app.use(`${extendUrl}`, authRoutes)
 
 app.listen(PORT, (err) => {
   if(err) {

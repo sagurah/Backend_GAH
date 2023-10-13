@@ -3,13 +3,6 @@ const prisma = require('../prisma/index')
 const addTarif = async (req, res) => {
   const newData = req.body
 
-  if(!newData) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Data tarif tidak boleh kosong'
-    })
-  }
-
   try {
     const result = await prisma.tarif.create({
       data: newData
@@ -57,13 +50,6 @@ const getAllTarif = async (req, res) => {
 const getTarifByRangeHarga = async (req, res) => {
   const { minHarga, maxHarga } = req.params
 
-  if(!minHarga || !maxHarga) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Range harga tidak boleh kosong'
-    })
-  }
-
   try {
     const result = await prisma.tarif.findMany({
       where: {
@@ -98,13 +84,6 @@ const getTarifByRangeHarga = async (req, res) => {
 const updateTarif = async (req, res) => {
   const id = req.params.id
   const newData = req.body
-
-  if(!id) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Parameter id tidak boleh kosong'
-    })
-  }
 
   try {
     const findTarif = await prisma.tarif.findUnique({
@@ -145,13 +124,6 @@ const updateTarif = async (req, res) => {
 
 const deleteTarif = async (req, res) => {
   const id = req.params.id
-
-  if(!id) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Parameter id tidak boleh kosong'
-    })
-  }
 
   try {
     const findTarif = await prisma.tarif.findUnique({

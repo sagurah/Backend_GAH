@@ -1,10 +1,10 @@
 const prisma = require('../prisma/index')
 
+const today = new Date()
+const plusTwoMonths = new Date().setMonth(today.getMonth() + 2)
+
 const addSeason = async (req, res) => {
   const newData = req.body
-
-  const today = new Date()
-  const plusTwoMonths = new Date().setMonth(today.getMonth() + 2)
 
   const tglMulai = new Date(newData.TGL_MULAI)
   const tglAkhir = new Date(newData.TGL_AKHIR)
@@ -68,20 +68,26 @@ const getAllSeason = async (req, res) => {
   }
 }
 
-const getSeasonByJenis = async (req, res) => {
-  const jenis = req.params.jenis
+const getSeasonByRangeDate = async (req, res) => {
+  const startDate = req.params.startDate
+  const endDate = req.params.endDate
 
   try {
-    const result = await prisma.season.findMany({
+    const result = await prisma.season.findFirst({
       where: {
-        JENIS_SEASON: jenis
+        TGL_MULAI: {
+          gte: new Date(startDate)
+        },
+        TGL_AKHIR: {
+          lte: new Date(endDate)
+        }
       }
     })
 
-    if(result.length === 0) {
+    if(!result) {
       return res.status(200).json({
         status: 'success',
-        message: `Tidak ada data season dengan jenis ${jenis}`
+        message: `Tidak ada data season dalam rentang ${startDate} hingga ${endDate}`
       })
     }
 
@@ -102,9 +108,6 @@ const getSeasonByJenis = async (req, res) => {
 const updateSeason = async (req, res) => {
   const id = req.params.id
   const newData = req.body
-
-  const today = new Date()
-  const plusTwoMonths = new Date().setMonth(today.getMonth() + 2)
 
   const tglMulai = new Date(newData.TGL_MULAI)
   const tglAkhir = new Date(newData.TGL_AKHIR)
@@ -199,7 +202,7 @@ const deleteSeason = async (req, res) => {
 module.exports = {
   addSeason,
   getAllSeason,
-  getSeasonByJenis,
+  getSeasonByRangeDate,
   updateSeason,
   deleteSeason
 }
