@@ -18,7 +18,7 @@ const Auth = async (req, res, next) => {
 
     const findUser = await prisma.akun.findFirst({
       where: {
-        USERNAME: verified.username
+        USERNAME: verified.USERNAME
       }
     })
 
@@ -29,7 +29,7 @@ const Auth = async (req, res, next) => {
       })
     }
 
-    req.user = findUser
+    req.currentUser = findUser
     next()
   } catch (err) {
     return res.status(500).json({

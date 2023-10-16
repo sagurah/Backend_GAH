@@ -39,7 +39,7 @@ const register = async (req, res) => {
       }
     })
 
-    combinedResult = {
+    const combinedResult = {
       akunData: resultTableAkun,
       customerData: resultTableCustomer
     }
@@ -47,7 +47,7 @@ const register = async (req, res) => {
     res.status(201).json({
       status: 'success',
       message: 'Berhasil register user',
-      data: combinedData
+      data: combinedResult
     })
   } catch (err) {
     res.status(400).json({
@@ -65,9 +65,6 @@ const login = async (req, res) => {
     const findUser = await prisma.akun.findFirst({
       where: {
         USERNAME: loginData.username
-      },
-      include: {
-        customer: true
       }
     })
   
@@ -87,7 +84,7 @@ const login = async (req, res) => {
       })
     }
     
-    const payload = findUser 
+    const payload = findUser
 
     const token = jwt.sign(payload, jwtSecretKey, { expiresIn: '1d' })
 

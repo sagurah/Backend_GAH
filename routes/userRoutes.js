@@ -1,12 +1,17 @@
 const { Router } = require('express')
-const { runValidation } = require('../utils/validators')
+const Auth = require('../middleware/auth')
+const { runValidation } = require('../utils/validators/index')
 
 const router = Router()
 
+const { userValidation } = require('../utils/validators/userValidator')
 const userController = require('../controllers/userController')
 
-router.post('/user/addUser', userController.addUser)
-router.get('/user/getAllUserWithCredentials', userController.getAllUserWithCredentials),
-router.get('/user/getUserByUsername/:username', userController.getUserDataByUsername)
+router.get('/profile', Auth, userController.getProfile)
+router.put('/profile/editAkun', Auth, userController.editAkun)
+router.put('/profile/editProfil', Auth, userValidation, runValidation, userController.editProfile)
+
+router.get('/riwayatReservasi', Auth, userController.getRiwayatReservasi)
+router.get('/riwayatReservasi/:id', Auth, userController.getDetailRiwayatReservasi)
 
 module.exports = router

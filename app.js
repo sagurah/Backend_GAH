@@ -7,6 +7,7 @@ const seasonRoutes = require('./routes/seasonRoutes')
 const fasilitasTambahanRoutes = require('./routes/fasilitasTambahanRoutes')
 const tarifRoutes = require('./routes/tarifRoutes')
 const authRoutes = require('./routes/authRoutes')
+const userRoutes = require('./routes/userRoutes')
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -23,6 +24,7 @@ app.use(`${extendUrl}`, seasonRoutes)
 app.use(`${extendUrl}`, fasilitasTambahanRoutes)
 app.use(`${extendUrl}`, tarifRoutes)
 app.use(`${extendUrl}`, authRoutes)
+app.use(`${extendUrl}`, userRoutes)
 
 app.listen(PORT, (err) => {
   if(err) {
