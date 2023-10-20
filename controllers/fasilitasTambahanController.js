@@ -5,7 +5,11 @@ const addFasilitasTambahan = async (req, res) => {
 
   try {
     const result = await prisma.fasilitas_Tambahan.create({
-      data: newData
+      data: {
+        NAMA_FASILITAS: newData.NAMA_FASILITAS,
+        SATUAN: newData.SATUAN,
+        HARGA: parseFloat(newData.HARGA)
+      }
     })
 
     res.status(200).json({
@@ -101,7 +105,11 @@ const updateFasilitasTambahan = async (req, res) => {
         ID_FASILITAS: parseInt(id)
       },
 
-      data: newData
+      data: {
+        NAMA_FASILITAS: newData.NAMA_FASILITAS,
+        SATUAN: newData.SATUAN,
+        HARGA: parseFloat(newData.HARGA)
+      }
     })
 
     res.status(200).json({

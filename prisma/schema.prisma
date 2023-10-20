@@ -87,7 +87,7 @@ model Detail_Reservasi_Fasilitas {
 // Start Tabel Reservasi dan Invoice
 
 model Reservasi {
-  ID_RESERVASI Int @id @default(autoincrement())
+  ID_RESERVASI Int @id @default(autoincrement())  
   TGL_RESERVASI DateTime? @default(now())
   TGL_CHECKIN DateTime?
   TGL_CHECKOUT DateTime?
@@ -95,8 +95,11 @@ model Reservasi {
   JML_ANAK Int?
   TOTAL_BAYAR Float?
   STATUS Int? // 0 = belum bayar, 1 = sudah bayar, 2 = sudah checkin, 3 = sudah checkout
+
   ID_PEGAWAI Int?
   ID_CUSTOMER Int?
+  pegawai Pegawai? @relation(fields: [ID_PEGAWAI], references: [ID_PEGAWAI])
+  customer Customer? @relation(fields: [ID_CUSTOMER], references: [ID_CUSTOMER])
 
   invoice Invoice[]
   detail_reservasi_kamar Detail_Reservasi_Kamar[]
@@ -150,6 +153,8 @@ model Customer {
 
   ID_AKUN Int?
   akun Akun? @relation(fields: [ID_AKUN], references: [ID_AKUN])
+
+  reservasi Reservasi[]
 }
 
 model Pegawai {
@@ -158,6 +163,8 @@ model Pegawai {
 
   ID_AKUN Int?
   akun Akun? @relation(fields: [ID_AKUN], references: [ID_AKUN])
+
+  reservasi Reservasi[]
 }
 
 // End Tabel Akun Pegawai dan Customer

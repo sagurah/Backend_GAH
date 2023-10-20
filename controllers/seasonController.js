@@ -25,7 +25,12 @@ const addSeason = async (req, res) => {
 
   try {
     const result = await prisma.season.create({
-      data: newData
+      data: {
+        JENIS_SEASON: newData.JENIS_SEASON,
+        TGL_MULAI: newData.TGL_MULAI,
+        TGL_AKHIR: newData.TGL_AKHIR,
+        HARGA: parseFloat(newData.HARGA)
+      }
     })
 
     res.status(200).json({
@@ -145,7 +150,12 @@ const updateSeason = async (req, res) => {
         ID_SEASON: parseInt(id)
       },
 
-      data: newData
+      data: {
+        JENIS_SEASON: newData.JENIS_SEASON,
+        TGL_MULAI: newData.TGL_MULAI,
+        TGL_AKHIR: newData.TGL_AKHIR,
+        HARGA: parseFloat(newData.HARGA)
+      }
     })
 
     res.status(200).json({

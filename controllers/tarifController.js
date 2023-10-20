@@ -5,7 +5,11 @@ const addTarif = async (req, res) => {
 
   try {
     const result = await prisma.tarif.create({
-      data: newData
+      data: {
+        TOTAL_TARIF: parseFloat(newData.TOTAL_TARIF),
+        ID_KAMAR: parseInt(newData.ID_KAMAR),
+        ID_SEASON: parseInt(newData.ID_SEASON),
+      }
     })
 
     res.status(200).json({
@@ -104,7 +108,11 @@ const updateTarif = async (req, res) => {
         ID_TARIF: parseInt(id)
       },
 
-      data: newData
+      data: {
+        TOTAL_TARIF: parseFloat(newData.TOTAL_TARIF),
+        ID_KAMAR: parseInt(newData.ID_KAMAR),
+        ID_SEASON: parseInt(newData.ID_SEASON),
+      }
     })
 
     res.status(200).json({

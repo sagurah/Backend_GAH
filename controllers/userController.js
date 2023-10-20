@@ -58,7 +58,6 @@ const editAkun = async (req, res) => {
         USERNAME: username
       },
       data: {
-        USERNAME: newData.username,
         PASSWORD: await encryptPassword(newData.newPassword)
       }
     })
@@ -138,9 +137,32 @@ const getRiwayatReservasi = async (req, res) => {
     })
   
     if(!customer) {
-      return res.status(404).json({
-        status: 'error',
-        message: 'Data customer tidak ditemukan'
+      const pegawai = await prisma.pegawai.findFirst({
+        where: {
+          ID_AKUN: idAkun
+        }
+      })
+      console.log(pegawai)
+      console.log(pegawai.ID_PEGAWAI)
+
+      if(!pegawai) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Data customer tidak ditemukan'
+        })
+      }
+
+      const riwayatTransaksi = await prisma.reservasi.findMany({
+        where: {
+          ID_PEGAWAI: pegawai.ID_PEGAWAI
+        }
+      })
+      console.log(riwayatTransaksi)
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Riwayat transaksi pegawai berhasil didapatkan',
+        data: riwayatTransaksi
       })
     }
   
@@ -150,16 +172,11 @@ const getRiwayatReservasi = async (req, res) => {
       where: {
         ID_CUSTOMER: idCustomer
       },
-      include: {
-        invoice: true,
-        detail_reservasi_kamar: true,
-        detail_reservasi_fasilitas: true
-      }
     })
   
     res.status(200).json({
       status: 'success',
-      message: 'Riwayat transaksi berhasil didapatkan',
+      message: 'Riwayat transaksi customer berhasil didapatkan',
       data: riwayatTransaksi
     })
   } catch (err) {

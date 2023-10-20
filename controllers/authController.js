@@ -74,7 +74,7 @@ const login = async (req, res) => {
         message: 'Username tidak ditemukan'
       })
     }
-  
+    
     const isPasswordMatch = await comparePassword(loginData.password, findUser.PASSWORD)
   
     if(!isPasswordMatch) {

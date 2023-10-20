@@ -63,7 +63,14 @@ const addKamar = async (req, res) => {
 
   try {
     const result = await prisma.kamar.create({
-      data: newKamar
+      data: {
+        NO_KAMAR: parseInt(newKamar.NO_KAMAR),
+        JENIS_KAMAR: newKamar.JENIS_KAMAR,
+        JENIS_BED: newKamar.JENIS_BED,
+        KAPASITAS: parseInt(newKamar.KAPASITAS),
+        LUAS_KAMAR: parseInt(newKamar.LUAS_KAMAR),
+        FASILITAS: newKamar.FASILITAS,
+      }
     })
 
     res.status(200).json({ 
@@ -104,7 +111,14 @@ const updateKamar = async (req, res) => {
         ID_KAMAR: parseInt(id)
       },
   
-      data: updatedKamar
+      data: {
+        NO_KAMAR: parseInt(updatedKamar.NO_KAMAR),
+        JENIS_KAMAR: updatedKamar.JENIS_KAMAR,
+        JENIS_BED: updatedKamar.JENIS_BED,
+        KAPASITAS: parseInt(updatedKamar.KAPASITAS),
+        LUAS_KAMAR: parseInt(updatedKamar.LUAS_KAMAR),
+        FASILITAS: updatedKamar.FASILITAS,
+      }
     })
 
     res.status(200).json({
