@@ -9,7 +9,7 @@ const userController = require('../controllers/userController')
 
 router.get('/profile', Auth, userController.getProfile)
 router.put('/profile/editAkun', Auth, userController.editAkun)
-router.put('/profile/editProfil', Auth, userValidation, runValidation, userController.editProfile)
+router.put('/profile/editProfile', Auth, userValidation, runValidation, userController.editProfile)
 
 router.get('/riwayatReservasi', Auth, userController.getRiwayatReservasi)
 router.get('/riwayatReservasi/:id', Auth, userController.getDetailRiwayatReservasi)

@@ -142,8 +142,6 @@ const getRiwayatReservasi = async (req, res) => {
           ID_AKUN: idAkun
         }
       })
-      console.log(pegawai)
-      console.log(pegawai.ID_PEGAWAI)
 
       if(!pegawai) {
         return res.status(404).json({
@@ -157,7 +155,6 @@ const getRiwayatReservasi = async (req, res) => {
           ID_PEGAWAI: pegawai.ID_PEGAWAI
         }
       })
-      console.log(riwayatTransaksi)
 
       return res.status(200).json({
         status: 'success',
