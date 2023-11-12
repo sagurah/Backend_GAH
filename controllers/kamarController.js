@@ -62,6 +62,19 @@ const addKamar = async (req, res) => {
   const newKamar = req.body
 
   try {
+    const findKamar = await prisma.kamar.findFirst({
+      where: {
+        NO_KAMAR: parseInt(newKamar.NO_KAMAR)
+      }
+    })
+
+    if(findKamar) {
+      return res.status(400).json({
+        status: 'error',
+        message: `Kamar dengan nomor ${newKamar.NO_KAMAR} sudah ada`
+      })
+    }
+
     const result = await prisma.kamar.create({
       data: {
         NO_KAMAR: parseInt(newKamar.NO_KAMAR),
@@ -106,11 +119,23 @@ const updateKamar = async (req, res) => {
       })
     }
 
+    const findKamar = await prisma.kamar.findFirst({
+      where: {
+        NO_KAMAR: parseInt(updatedKamar.NO_KAMAR)
+      }
+    })
+
+    if(findKamar) {
+      return res.status(400).json({
+        status: 'error',
+        message: `Kamar dengan nomor ${newKamar.NO_KAMAR} sudah ada`
+      })
+    }
+
     const result = await prisma.kamar.update({
       where: {
         ID_KAMAR: parseInt(id)
       },
-  
       data: {
         NO_KAMAR: parseInt(updatedKamar.NO_KAMAR),
         JENIS_KAMAR: updatedKamar.JENIS_KAMAR,

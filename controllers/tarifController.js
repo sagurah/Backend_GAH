@@ -4,6 +4,19 @@ const addTarif = async (req, res) => {
   const newData = req.body
 
   try {
+    const findTarif = await prisma.tarif.findFirst({
+      where: {
+        ID_KAMAR: parseInt(newData.ID_KAMAR),
+      }
+    })
+
+    if(findTarif) {
+      return res.status(400).json({
+        status: 'error',
+        message: `Tarif dengan id kamar ${newData.ID_KAMAR} sudah ada`
+      })
+    }
+
     const result = await prisma.tarif.create({
       data: {
         TOTAL_TARIF: parseFloat(newData.TOTAL_TARIF),

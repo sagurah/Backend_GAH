@@ -8,6 +8,8 @@ const fasilitasTambahanRoutes = require('./routes/fasilitasTambahanRoutes')
 const tarifRoutes = require('./routes/tarifRoutes')
 const authRoutes = require('./routes/authRoutes')
 const userRoutes = require('./routes/userRoutes')
+const customerGroupRoutes = require('./routes/customerGroupRoutes')
+const transaksiRoutes = require('./routes/transaksiRoutes')
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -25,10 +27,14 @@ app.use(`${extendUrl}`, fasilitasTambahanRoutes)
 app.use(`${extendUrl}`, tarifRoutes)
 app.use(`${extendUrl}`, authRoutes)
 app.use(`${extendUrl}`, userRoutes)
+app.use(`${extendUrl}`, customerGroupRoutes)
+app.use(`${extendUrl}`, transaksiRoutes)
 
 app.listen(PORT, (err) => {
   if(err) {
     console.log(`Server Error: ${err}`)
   }
+  console.log('====================================')
   console.log(`Server Running on PORT: ${PORT}`)
+  console.log('====================================')
 })

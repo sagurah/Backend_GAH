@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `reservasi` ADD COLUMN `NO_RESERVASI` VARCHAR(191) NULL;
