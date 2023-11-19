@@ -16,7 +16,8 @@ router.put('/profile/editAkunMobile', Auth, userController.editAkunMobile)
 router.put('/profile/editProfile', Auth, userValidation, runValidation, userController.editProfile)
 router.put('/profile/editProfileMobile', Auth, userValidation, runValidation, userController.editProfileMobile)
 
-router.get('/riwayatReservasi', Auth, userController.getRiwayatReservasi)
-router.get('/riwayatReservasi/:id', Auth, userController.getDetailRiwayatReservasi)
+router.get('/allRiwayatReservasi', Auth, userController.getAllRiwayatReservasi)
+router.get('/riwayatReservasi/:id', Auth, userController.getRiwayatReservasi)
+router.get('/detailReservasi/:id', Auth, userController.getDetailRiwayatReservasi)
 
 module.exports = router

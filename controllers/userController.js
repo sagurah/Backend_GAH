@@ -1,179 +1,185 @@
-const prisma = require('../prisma/index')
-const { encryptPassword, comparePassword } = require('../utils/hashPassword')
+const prisma = require("../prisma/index");
+const { encryptPassword, comparePassword } = require("../utils/hashPassword");
 
 const getProfileById = async (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
 
   const findUser = await prisma.akun.findFirst({
     where: {
-      ID_AKUN: parseInt(id)
+      ID_AKUN: parseInt(id),
     },
     include: {
-      customer: true
-    }
-  })
+      customer: true,
+    },
+  });
 
-  if(!findUser) {
+  if (!findUser) {
     return res.status(404).json({
-      status: 'error',
-      message: `User dengan id ${id} tidak ditemukan`
-    })
+      status: "error",
+      message: `User dengan id ${id} tidak ditemukan`,
+    });
   }
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     message: `Berhasil mendapatkan user dengan id ${id}`,
-    data: findUser
-  })
-}
+    data: findUser,
+  });
+};
 
 const getProfile = async (req, res) => {
-  const username = req.currentUser.USERNAME
+  const username = req.currentUser.USERNAME;
 
   const findUser = await prisma.akun.findFirst({
     where: {
-      USERNAME: username
+      USERNAME: username,
     },
     include: {
-      customer: true
+      customer: true,
     },
-  })
+  });
 
-  if(!findUser) {
+  if (!findUser) {
     return res.status(404).json({
-      status: 'error',
-      message: `User dengan username ${username} tidak ditemukan`
-    })
+      status: "error",
+      message: `User dengan username ${username} tidak ditemukan`,
+    });
   }
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     message: `Berhasil mendapatkan user dengan username ${username}`,
-    data: findUser
-  })
-}
+    data: findUser,
+  });
+};
 
 const editAkun = async (req, res) => {
-  const username = req.currentUser.USERNAME
-  const newData = req.body
+  const username = req.currentUser.USERNAME;
+  const newData = req.body;
 
   try {
     const findUser = await prisma.akun.findFirst({
       where: {
-        USERNAME: username
+        USERNAME: username,
       },
-    })
-  
-    if(!findUser) {
+    });
+
+    if (!findUser) {
       return res.status(404).json({
-        status: 'error',
-        message: `User dengan username ${username} tidak ditemukan`
-      })
+        status: "error",
+        message: `User dengan username ${username} tidak ditemukan`,
+      });
     }
-  
-    const checkPassword = await comparePassword(newData.oldPassword, findUser.PASSWORD)
-    if(!checkPassword) {
+
+    const checkPassword = await comparePassword(
+      newData.oldPassword,
+      findUser.PASSWORD
+    );
+    if (!checkPassword) {
       return res.status(400).json({
-        status: 'error',
-        message: 'Password tidak sesuai'
-      })
+        status: "error",
+        message: "Password tidak sesuai",
+      });
     }
-  
+
     const result = await prisma.akun.update({
       where: {
-        USERNAME: username
+        USERNAME: username,
       },
       data: {
-        PASSWORD: await encryptPassword(newData.newPassword)
-      }
-    })
+        PASSWORD: await encryptPassword(newData.newPassword),
+      },
+    });
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       message: `Berhasil mengupdate data akun ${username}`,
-      data: result
-    })
+      data: result,
+    });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
+      status: "error",
       message: `Internal server error
-      Trace: ${err.message}`
-    })
+      Trace: ${err.message}`,
+    });
   }
-}
+};
 
 const editAkunMobile = async (req, res) => {
-  const newData = req.body
+  const newData = req.body;
 
   try {
     const findUser = await prisma.akun.findFirst({
       where: {
-        USERNAME: newData.username
+        USERNAME: newData.username,
       },
-    })
-  
-    if(!findUser) {
+    });
+
+    if (!findUser) {
       return res.status(404).json({
-        status: 'error',
-        message: `User dengan username ${newData.username} tidak ditemukan`
-      })
+        status: "error",
+        message: `User dengan username ${newData.username} tidak ditemukan`,
+      });
     }
-  
-    const checkPassword = await comparePassword(newData.oldPassword, findUser.PASSWORD)
-    if(!checkPassword) {
+
+    const checkPassword = await comparePassword(
+      newData.oldPassword,
+      findUser.PASSWORD
+    );
+    if (!checkPassword) {
       return res.status(400).json({
-        status: 'error',
-        message: 'Password tidak sesuai'
-      })
+        status: "error",
+        message: "Password tidak sesuai",
+      });
     }
-  
+
     const result = await prisma.akun.update({
       where: {
-        USERNAME: newData.username
+        USERNAME: newData.username,
       },
       data: {
-        PASSWORD: await encryptPassword(newData.newPassword)
-      }
-    })
+        PASSWORD: await encryptPassword(newData.newPassword),
+      },
+    });
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       message: `Berhasil mengupdate data akun ${newData.username}`,
-      data: result
-    })
+      data: result,
+    });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
+      status: "error",
       message: `Internal server error
-      Trace: ${err.message}`
-    })
+      Trace: ${err.message}`,
+    });
   }
-}
+};
 
 const editProfile = async (req, res) => {
-  const username = req.currentUser.USERNAME
-  const newData = req.body
+  const username = req.currentUser.USERNAME;
+  const newData = req.body;
 
   try {
     const findUser = await prisma.akun.findFirst({
       where: {
-        USERNAME: username
+        USERNAME: username,
       },
       include: {
-        customer: true
-      }
-    })
+        customer: true,
+      },
+    });
 
-    if(!findUser) {
+    if (!findUser) {
       return res.status(404).json({
-        status: 'error',
-        message: `User dengan username ${username} tidak ditemukan`
-      })
+        status: "error",
+        message: `User dengan username ${username} tidak ditemukan`,
+      });
     }
 
     const result = await prisma.customer.update({
       where: {
-        ID_CUSTOMER: findUser.customer[0].ID_CUSTOMER
+        ID_CUSTOMER: findUser.customer[0].ID_CUSTOMER,
       },
 
       data: {
@@ -182,47 +188,47 @@ const editProfile = async (req, res) => {
         ALAMAT: newData.ALAMAT,
         NO_TELP: newData.NO_TELP,
         EMAIL: newData.EMAIL,
-      }
-    })
+      },
+    });
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       message: `Berhasil mengupdate data profile ${username}`,
-      data: result
-    })
+      data: result,
+    });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
+      status: "error",
       message: `Internal server error
-      Trace: ${err.message}`
-    })
+      Trace: ${err.message}`,
+    });
   }
-}
+};
 
 const editProfileMobile = async (req, res) => {
-  const username = req.body.USERNAME
-  const newData = req.body
+  const username = req.body.USERNAME;
+  const newData = req.body;
 
   try {
     const findUser = await prisma.akun.findFirst({
       where: {
-        USERNAME: username
+        USERNAME: username,
       },
       include: {
-        customer: true
-      }
-    })
+        customer: true,
+      },
+    });
 
-    if(!findUser) {
+    if (!findUser) {
       return res.status(404).json({
-        status: 'error',
-        message: `User dengan username ${username} tidak ditemukan`
-      })
+        status: "error",
+        message: `User dengan username ${username} tidak ditemukan`,
+      });
     }
 
     const result = await prisma.customer.update({
       where: {
-        ID_CUSTOMER: findUser.customer[0].ID_CUSTOMER
+        ID_CUSTOMER: findUser.customer[0].ID_CUSTOMER,
       },
 
       data: {
@@ -231,129 +237,116 @@ const editProfileMobile = async (req, res) => {
         ALAMAT: newData.ALAMAT,
         NO_TELP: newData.NO_TELP,
         EMAIL: newData.EMAIL,
-      }
-    })
+      },
+    });
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       message: `Berhasil mengupdate data profile ${username}`,
-      data: result
-    })
+      data: result,
+    });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
+      status: "error",
       message: `Internal server error
-      Trace: ${err.message}`
-    })
+      Trace: ${err.message}`,
+    });
   }
-}
+};
 
 const getRiwayatReservasi = async (req, res) => {
-  const user = req.currentUser
-  const idAkun = user.ID_AKUN
+  const { id } = req.params;
 
   try {
-    const customer = await prisma.customer.findFirst({
+    const customers = await prisma.customer.findMany({
       where: {
-        ID_AKUN: idAkun
-      }
-    })
+        ID_AKUN: parseInt(id),
+      },
+    });
 
-    const pegawai = await prisma.pegawai.findFirst({
-      where: {
-        ID_AKUN: idAkun
-      }
-    })
-  
-    if(!customer && !pegawai) {
-      return res.status(404).json({
-        status: 'error',
-        message: 'User tidak ditemukan'
-      })
-    }
-
-    if(customer) {
+    const riwayatReservasis = customers.map(async (customer) => {
       const riwayatReservasi = await prisma.reservasi.findMany({
         where: {
-          ID_CUSTOMER: customer.ID_CUSTOMER
-        }
-      })
+          ID_CUSTOMER: customer.ID_CUSTOMER,
+        },
+      }); 
 
-      return res.status(200).json({
-        status: 'success',
-        message: 'Riwayat reservasi berhasil didapatkan',
-        data: riwayatReservasi
-      })
-    } else if(pegawai){
-      const riwayatReservasi = await prisma.reservasi.findMany({
-        where: {
-          ID_PEGAWAI: pegawai.ID_PEGAWAI
-        }
-      })
+      return riwayatReservasi
+    })
 
-      return res.status(200).json({
-        status: 'success',
-        message: 'Riwayat reservasi berhasil didapatkan',
-        data: riwayatReservasi
-      })
-    }
-  
+    return res.status(200).json({
+      status: "success",
+      message: "Riwayat reservasi berhasil didapatkan",
+      data: (await Promise.all(riwayatReservasis)).flat(),
+    });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
+      status: "error",
       message: `Internal server error
-      Trace: ${err.message}`
-    })
+      Trace: ${err.message}`,
+    });
   }
-}
+};
 
 const getDetailRiwayatReservasi = async (req, res) => {
-  const idReservasi = req.params.id
+  const idReservasi = req.params.id;
 
   try {
     const detailRiwayatTransaksi = await prisma.reservasi.findFirst({
       where: {
-        ID_RESERVASI: parseInt(idReservasi)
+        ID_RESERVASI: parseInt(idReservasi),
       },
       include: {
         invoice: true,
         detail_reservasi_fasilitas: {
           include: {
-            fasilitas_tambahan: true
-          }
+            fasilitas_tambahan: true,
+          },
         },
         detail_reservasi_kamar: {
           include: {
             tarif: {
               include: {
                 kamar: true,
-                season: true
-              }
-            }
-          }
+                season: true,
+              },
+            },
+          },
         },
         customer: true,
-        pegawai: true
-      }
-    })
+        pegawai: true,
+      },
+    });
 
-    if(!detailRiwayatTransaksi) {
+    if (!detailRiwayatTransaksi) {
       return res.status(404).json({
-        status: 'error',
-        message: 'Riwayat transaksi tidak ditemukan'
-      })
+        status: "error",
+        message: "Riwayat transaksi tidak ditemukan",
+      });
     }
 
     res.status(200).json({
-      status: 'success',
-      message: 'Detail riwayat transaksi berhasil didapatkan',
-      data: detailRiwayatTransaksi
-    })
+      status: "success",
+      message: "Detail riwayat transaksi berhasil didapatkan",
+      data: detailRiwayatTransaksi,
+    });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
+      status: "error",
       message: `Internal server error
-      Trace: ${err.message}`
+      Trace: ${err.message}`,
+    });
+  }
+};
+
+const getAllRiwayatReservasi = async (req, res) => {
+  try {
+    const result = await prisma.reservasi.findMany({})
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: `Internal server error
+      Trace: ${err.message}`,
     })
   }
 }
@@ -366,5 +359,6 @@ module.exports = {
   editProfile,
   editProfileMobile,
   getRiwayatReservasi,
-  getDetailRiwayatReservasi
-}
+  getDetailRiwayatReservasi,
+  getAllRiwayatReservasi
+};

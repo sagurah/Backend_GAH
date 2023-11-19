@@ -136,11 +136,14 @@ model Akun {
   USERNAME String? @unique
   PASSWORD String?
 
+  ID_ROLE Int?
+  role Role? @relation(fields: [ID_ROLE], references: [ID_ROLE])
+
+  CREATED_AT DateTime?
+
   customer Customer[]
   pegawai Pegawai[]
 
-  ID_ROLE Int?
-  role Role? @relation(fields: [ID_ROLE], references: [ID_ROLE])
 }
 
 model Customer {

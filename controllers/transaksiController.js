@@ -1,6 +1,7 @@
 const prisma = require('../prisma/index')
 
 const today = new Date()
+today.setHours(0, 0, 0, 0)
 
 const generateReservationNumber = (date, id) => {
   const year = date.getFullYear().toString().slice(-2)
@@ -411,16 +412,50 @@ const finishTransaksi = async (req, res) => {
   }
 }
 
-const uploadBuktiPembayaran = async (req, res) => {
+const cancelTransaksi = async (req, res) => {
   const { id } = req.params
-  const { buktiPembayaran } = req.body
 
-  
+  try {
+    const deletedKamar = await prisma.detail_Reservasi_Kamar.deleteMany({
+      where: {
+        ID_RESERVASI: parseInt(id)
+      }
+    })
+
+    const deletedFasilitas = await prisma.detail_Reservasi_Fasilitas.deleteMany({
+      where: {
+        ID_RESERVASI: parseInt(id)
+      }
+    })
+
+    const deletedTransaksi = await prisma.reservasi.delete({
+      where: {
+        ID_RESERVASI: parseInt(id)
+      }
+    })
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Transaksi berhasil dibatalkan',
+      data: {
+        deletedTransaksi,
+        deletedKamar,
+        deletedFasilitas
+      }
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      message: `Transaksi gagal dibatalkan
+      Trace: ${error.message}`
+    })
+  }
 }
 
 module.exports = {
   addTransaksiCustomer,
   addTransaksiSM,
   getKamarReady,
-  finishTransaksi
+  finishTransaksi,
+  cancelTransaksi
 }

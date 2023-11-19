@@ -9,5 +9,6 @@ router.get('/transaksi/getKamarReady', Auth, transaksiController.getKamarReady)
 router.post('/transaksi/addTransaksiCustomer', Auth, transaksiController.addTransaksiCustomer)
 router.post('/transaksi/addTransaksiSM', Auth, transaksiController.addTransaksiSM)
 router.put('/transaksi/finishTransaksi', Auth, transaksiController.finishTransaksi)
+router.delete('/transaksi/cancelTransaksi/:id', Auth, transaksiController.cancelTransaksi)
 
 module.exports = router
