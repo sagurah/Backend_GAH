@@ -139,8 +139,6 @@ model Akun {
   ID_ROLE Int?
   role Role? @relation(fields: [ID_ROLE], references: [ID_ROLE])
 
-  CREATED_AT DateTime?
-
   customer Customer[]
   pegawai Pegawai[]
 
