@@ -341,7 +341,24 @@ const getDetailRiwayatReservasi = async (req, res) => {
 
 const getAllRiwayatReservasi = async (req, res) => {
   try {
-    const result = await prisma.reservasi.findMany({})
+    const result = await prisma.reservasi.findMany({
+      include: {
+        customer: true
+      }
+    })
+
+    if (result.length === 0 ){
+      return res.status(404).json({
+        status: "error",
+        message: "Tidak ada riwayat reservasi",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Berhasil mendapatkan semua riwayat reservasi",
+      data: result
+    })
   } catch (error) {
     res.status(500).json({
       status: "error",

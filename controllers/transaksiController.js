@@ -295,65 +295,27 @@ const getKamarReady = async (req, res) => {
   try {
     const result = await prisma.kamar.findMany({
       where: {
-        AND: [
-          {
-            NOT: {
-              tarif: {
+        NOT: {
+          tarif: {
+            some: {
+              detail_reservasi_kamar: {
                 some: {
-                  detail_reservasi_kamar: {
-                    some: {
-                      reservasi: {
-                        STATUS: {
-                          in: [0, 3]
-                        },
-                        TGL_CHECKIN: {
-                          lte: endDate
-                        },
-                        TGL_CHECKOUT: {
-                          gte: startDate
-                        }
-                      }
+                  reservasi: {
+                    STATUS: {
+                      in: [1, 2] 
+                    },
+                    TGL_CHECKIN: {
+                      lte: endDate
+                    },
+                    TGL_CHECKOUT: {
+                      gte: startDate
                     }
                   }
                 }
               }
             }
-          },
-          {
-            OR: [
-              {
-                tarif: {
-                  some: {
-                    detail_reservasi_kamar: {
-                      some: {
-                        reservasi: {
-                          STATUS: {
-                            in: [0, 3]
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                tarif: {
-                  some: {
-                    detail_reservasi_kamar: {
-                      none: {
-                        reservasi: {
-                          STATUS: {
-                            notIn: [0, 3]
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            ]
           }
-        ]
+        }
       },
       include: {
         tarif: {
@@ -363,6 +325,7 @@ const getKamarReady = async (req, res) => {
         },
       },
     });
+    
 
     if (result.length === 0) {
       return res.status(404).json({
