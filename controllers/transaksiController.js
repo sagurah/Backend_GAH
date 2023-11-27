@@ -58,6 +58,9 @@ const addTransaksiCustomer = async (req, res) => {
         JML_ANAK: parseInt(jmlAnak),
         TOTAL_BAYAR: parseFloat(totalBayar),
         STATUS: 0,
+        CREATED_AT_MONTH: today.toLocaleString('en-US', { month: 'long' }),
+        CREATED_AT_YEAR: today.getFullYear().toString(),
+        JENIS_CUSTOMER: 'Personal',
         ID_CUSTOMER: parseInt(findCustomer.ID_CUSTOMER),
       }
     })
@@ -176,6 +179,9 @@ const addTransaksiSM = async (req, res) => {
         JML_ANAK: parseInt(jmlAnak),
         TOTAL_BAYAR: parseFloat(totalBayar),
         STATUS: 0,
+        CREATED_AT_MONTH: today.toLocaleString('en-US', { month: 'long' }),
+        CREATED_AT_YEAR: today.getFullYear().toString(),
+        JENIS_CUSTOMER: 'Group',
         ID_CUSTOMER: parseInt(idCustomer),
       }
     })

@@ -97,6 +97,10 @@ model Reservasi {
   TOTAL_BAYAR Float?
   STATUS Int? // 0 = belum bayar, 1 = sudah bayar, 2 = sudah checkin, 3 = sudah checkout
 
+  CREATED_AT_MONTH String?
+  CREATED_AT_YEAR String?
+  JENIS_CUSTOMER String?
+
   ID_PEGAWAI Int?
   ID_CUSTOMER Int?
   pegawai Pegawai? @relation(fields: [ID_PEGAWAI], references: [ID_PEGAWAI])
@@ -152,6 +156,9 @@ model Customer {
   NO_TELP String? @default("-")
   EMAIL String? @default("-")
   ALAMAT String? @default("-")
+  CREATED_AT DateTime?
+  CREATED_AT_MONTH String?
+  CREATED_AT_YEAR String?
 
   ID_AKUN Int?
   akun Akun? @relation(fields: [ID_AKUN], references: [ID_AKUN])

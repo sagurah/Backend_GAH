@@ -11,6 +11,7 @@ const userRoutes = require('./routes/userRoutes')
 const customerGroupRoutes = require('./routes/customerGroupRoutes')
 const transaksiRoutes = require('./routes/transaksiRoutes')
 const checkInRoutes = require('./routes/transaksiMenginapRoutes')
+const laporanRoutes = require('./routes/laporanRoutes')
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -31,6 +32,7 @@ app.use(`${extendUrl}`, userRoutes)
 app.use(`${extendUrl}`, customerGroupRoutes)
 app.use(`${extendUrl}`, transaksiRoutes)
 app.use(`${extendUrl}`, checkInRoutes)
+app.use(`${extendUrl}`, laporanRoutes)
 
 app.listen(PORT, (err) => {
   if(err) {

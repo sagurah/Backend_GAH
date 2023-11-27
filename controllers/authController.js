@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 
 const jwtSecretKey = process.env.JWT_SECRET
 
+const today = new Date()
+
 const register = async (req, res) => {
   const newData = req.body
 
@@ -31,6 +33,9 @@ const register = async (req, res) => {
 
     const resultTableCustomer = await prisma.customer.create({
       data: {
+        CREATED_AT: today,
+        CREATED_AT_MONTH: today.toLocaleString('en-US', { month: 'long' }),
+        CREATED_AT_YEAR: today.getFullYear().toString(),
         akun: {
           connect: {
             ID_AKUN: resultTableAkun.ID_AKUN

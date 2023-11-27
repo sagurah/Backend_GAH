@@ -1,5 +1,7 @@
 const prisma = require('../prisma/index')
 
+const today = new Date()
+
 const addCustomerGroup = async (req, res) => {
   const newData = req.body
 
@@ -12,6 +14,9 @@ const addCustomerGroup = async (req, res) => {
         NO_TELP: newData.NO_TELP,
         EMAIL: newData.EMAIL,
         ALAMAT: newData.ALAMAT,
+        CREATED_AT: today,
+        CREATED_AT_MONTH: today.toLocaleString('en-US', { month: 'long' }),
+        CREATED_AT_YEAR: today.getFullYear().toString(),
         ID_AKUN: parseInt(newData.ID_AKUN)
       }
     })
